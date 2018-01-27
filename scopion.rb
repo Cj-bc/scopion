@@ -39,9 +39,9 @@ class Scopion < Formula
 		preCheck # check architecture,OS,macOS version
 
 		system "mkdir", "build", "&&", "cd", "$_"
-		cmake .. -DCMAKE_BUILD_TYPE=Release -DFORMAT_BEFORE_BUILD=OFF
-		make -j"$(nproc)" # build
-		sudo make install # install
+		system "cmake", "..", "-DCMAKE", "BUILD_TYPE=Release", "-DFORMAT_BEFORE_BUILD=OFF"
+		system "make", "-j", "\"$(nproc)\"" # build
+		system "sudo", "make", "install" # install
 	end
 
 	test do
