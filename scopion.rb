@@ -1,7 +1,3 @@
-# Documentation: https://docs.brew.sh/Formula-Cookbook.html
-#                http://www.rubydoc.info/github/Homebrew/brew/master/Formula
-# PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
-
 class Scopion < Formula
 	desc "a statically-typed functional programming language with powerful objective syntax"
 	homepage "https://scopion.coord-e.com/"
@@ -39,16 +35,14 @@ class Scopion < Formula
 
 
 	def install
-    # ENV.deparallelize  # if your formula fails when building in parallel
   
 		preCheck # check architecture,OS,macOS version
 
-		bin.install "bin/scopc" # Install scopc executable
-		lib.install "lib/libscopion.dylib" # Install libraries into #{HOMEBREW_PREFIX}/lib
-		prefix.install Dir["include"], Dir["etc"]
-		ohai "Do update_dyld_shared_cache in order to include path for libscopion.dylib" # ohai --> Display general info
-		system "sudo" "update_dyld_shared_cache"
-	  end
+		system "mkdir", "build", "&&", "cd", "$_"
+		cmake .. -DCMAKE_BUILD_TYPE=Release -DFORMAT_BEFORE_BUILD=OFF
+		make -j"$(nproc)" # build
+		sudo make install # install
+	end
 
 	test do
 		ohai "Test compiling hello world.."
