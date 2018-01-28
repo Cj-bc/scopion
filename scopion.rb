@@ -1,7 +1,7 @@
 class Scopion < Formula
 	desc "a statically-typed functional programming language with powerful objective syntax"
 	homepage "https://scopion.coord-e.com/"
-	url "https://github.com/Cj-bc/homebrew-scopion.git"
+	url "https://github.com/coord-e/scopion.git"
 	version "0.0.3.1"
 	sha256 ""
 
