@@ -38,10 +38,8 @@ class Scopion < Formula
   
 		preCheck # check architecture,OS,macOS version
 
-		ohai "debug: ", `pwd`
 		mkdir("build")
 		cd("build")
-		ohai "debug: ", `pwd`
 		system "cmake", "-DCMAKE_BUILD_TYPE=Release", "-DFORMAT_BEFORE_BUILD=OFF", "-DCMAKE_INSTALL_PREFIX=#{prefix}", ".."
 		system "make" #, "-j", "#{CPUNumbers}" #  I Coudn't understand how to use -j command(it occure error)...Left here
 		system "make install" # install
