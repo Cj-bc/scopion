@@ -6,6 +6,7 @@ class Scopion < Formula
 	sha256 ""
 
 	SupportedOSLeast = "10.12"
+	CPUNumbers = `sysctl -n hw.ncpu`
 
 	depends_on "cmake" => :build
 	depends_on "wget" 
@@ -15,11 +16,10 @@ class Scopion < Formula
 	depends_on "llvm"
 	depends_on "bdw-gc"
 
-
 	def preCheck
 		# test architecture. x86_64 is needed
-		if `uname -m` != "x86_64" then
-			odie "Architecture x86_64 is needed.Yours isn't it." # odie --> display error messages and exist.
+		if Hardware::CPU.is_32_bit? then
+			odie "Architecture x86_64 is needed.Yours is #{arch}." # odie --> display error messages and exist.
 		end
 
 		# I don't treat with Linux yet. I'll do it later,sorry :(
@@ -38,10 +38,13 @@ class Scopion < Formula
   
 		preCheck # check architecture,OS,macOS version
 
-		system "mkdir", "build", "&&", "cd", "$_"
-		system "cmake", "..", "-DCMAKE", "BUILD_TYPE=Release", "-DFORMAT_BEFORE_BUILD=OFF"
-		system "make", "-j", "\"$(nproc)\"" # build
-		system "sudo", "make", "install" # install
+		ohai "debug: ", `pwd`
+		mkdir("build")
+		cd("build")
+		ohai "debug: ", `pwd`
+		system "cmake", "-DCMAKE_BUILD_TYPE=Release", "-DFORMAT_BEFORE_BUILD=OFF", "-DCMAKE_INSTALL_PREFIX=#{prefix}", ".."
+		system "make" #, "-j", "#{CPUNumbers}" #  I Coudn't understand how to use -j command(it occure error)...Left here
+		system "make install" # install
 	end
 
 	test do
